@@ -55,8 +55,8 @@ function UrlSelector() {
 
 function UrlCrawler() {
 	SOURCECODE="${1}"
-	cat ${SOURCECODE} | grep -o 'href=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^href=["'"'"']//' -e 's/["'"'"']$//'
-	cat ${SOURCECODE} | grep -o 'src=['"'"'"][^"'"'"']*['"'"'"]' | sed -e 's/^src=["'"'"']//' -e 's/["'"'"']$//'
+	grep -o 'href=['"'"'"][^"'"'"']*['"'"'"]' "${SOURCECODE}" | sed -e 's/^href=["'"'"']//' -e 's/["'"'"']$//'
+	grep -o 'src=['"'"'"][^"'"'"']*['"'"'"]' "${SOURCECODE}" | sed -e 's/^src=["'"'"']//' -e 's/["'"'"']$//'
 }
 
 function CheckForm() {
@@ -67,7 +67,7 @@ function CheckForm() {
 	TEMPDIR="${HOME_DIR}/bashter-tempdata"
 	CHECKEDFORMFILE="${TEMPDIR}/CHECKED-FORM.BASHTER-${PROC_ID}.TMP"
 	IFS=$'\n'
-	for FORM in $(cat ${SOURCECODE} | perl -nle'print $& while m{<form\K.*?(?=>)}g' | sed 's/^/<form/g' | sed 's/$/>/g')
+	for FORM in $(perl -nle'print $& while m{<form\K.*?(?=>)}g' "${SOURCECODE}" | sed 's/^/<form/g' | sed 's/$/>/g')
 	do
 		FORMPOST=$(echo $FORM | grep -o 'method=['"'"'"][^"'"'"']*['"'"'"]' | grep -i post)
 		if [[ ! -z $(cat ${CHECKEDFORMFILE} 2> /dev/null | grep ''$FORM'') ]]
@@ -84,7 +84,7 @@ function CheckForm() {
 						bash ${FORM_TEST} ${URL} ${SOURCECODE}
 					fi
 				done
-		else 
+		else
 			echo "$(date +"[%H:%M:%S]") INFO: Form POST on \"${URL}\""
 			echo "$(date +"[%H:%M:%S]") FORM [POST]: \"${URL}\"" >> ${HOME_DIR}/scan-logs/${PROC_ID}-info.log
 				for FORM_TEST in $(find ${HOME_DIR}/modules/form | grep bash$)
@@ -110,19 +110,22 @@ then
 fi
 
 cat ${HOME_DIR}/BANNER.file
-echo ""
-echo "  ##### Version ${BASHTER_VERSION} released on ${RELEASED_DATE} #####"
-echo " [ $(hostname)@HOME_DIR : ${HOME_DIR} ]"
-echo ""
+cat <<eof
 
-echo " Please enter the URL you want to scan..."
-echo " Example: https://website.com/[optional-path]/"
+  ##### Version ${BASHTER_VERSION} released on ${RELEASED_DATE} #####"
+ [ $(hostname)@HOME_DIR : ${HOME_DIR} ]"
+
+ Please enter the URL you want to scan...
+ Example: https://website.com/[optional-path]/
+eof
 echo -ne " >>> "
 read WEBSITE
-echo ""
-echo " Crawling site based on main domain or domain which you scan only"
-echo " If you want to scan *.domain.com you can enter: [Y/y]"
-echo " But If you want to scan sub.domain.com only (let it empty)"
+cat <<eof
+
+ Crawling site based on main domain or domain which you scan only
+ If you want to scan *.domain.com you can enter: [Y/y]
+ But If you want to scan sub.domain.com only (let it empty)
+eof
 echo -ne " >>> "
 read URL_SELECTOR_MODE
 echo ""

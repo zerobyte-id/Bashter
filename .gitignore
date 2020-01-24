@@ -1,0 +1,10 @@
+# ignore
+*.TMP
+*.XTMP
+*.log
+bashter-tempdata/
+scan-logs
+
+# don't ignore
+!bashter-tempdata/empty.txt
+!scan-logs/empty.txt
