@@ -48,8 +48,8 @@ You only need to change the extension, for example `.bash` => `.bashx`.
 - This tool will consume a lot of disk usage, so don't forget to housekeep `bashter-tempdata` and` scan-logs`.
 
 ## Contributor:
-- Schopath ([@panophan](https://github.com/panophan))
-- Suhada ([@suhada99](https://github.com/suhada99))
+- Schopath ([@panophan](https://github.com/xchopath))
+- Suhada ([@suhada99](https://github.com/0xshdax))
 - Abay ([@abaykan](https://github.com/abaykan))
 
 ## EOF
